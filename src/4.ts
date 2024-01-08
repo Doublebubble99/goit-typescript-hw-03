@@ -6,34 +6,33 @@ class Key {
 }
 class Person {
   constructor(private key: Key) {}
-  getKey() {
-    return this.key.getSignature();
+  getKey(): Key {
+    return this.key;
   }
 }
 abstract class House {
-  door: "open" | "close";
-  key: Key | number = 5;
+  door: boolean = false;
+  constructor(public key: Key, public tenants: Person[]) {}
   comeIn(person: Person) {
-    let tenants: Person[] = [];
-    if (this.door === "open") {
-      tenants.push(person);
-      console.log(tenants);
+    if (this.door) {
+      this.tenants.push(person);
+      console.log(this.tenants);
     }
   }
-  abstract openDoor(key: number | Key): void;
+  abstract openDoor(key: Key): void;
 }
 class MyHouse extends House {
-  openDoor(key: number | Key): void {
-    if (this.key === key) {
-      this.door = "open";
+  openDoor(key: Key): void {
+    if (this.key.getSignature() === key.getSignature()) {
+      this.door = true;
       return;
     }
-    this.door = "close";
+    this.door = false;
   }
 }
 const key = new Key();
 const person = new Person(key);
-const house = new MyHouse();
+const house = new MyHouse(key, [person]);
 house.openDoor(person.getKey());
 house.comeIn(person);
 export {};
