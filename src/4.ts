@@ -11,8 +11,9 @@ class Person {
   }
 }
 abstract class House {
-  door: boolean = false;
-  constructor(public key: Key, public tenants: Person[]) {}
+  protected door: boolean = false;
+  public tenants: Person[] = [];
+  constructor(public key: Key) {}
   comeIn(person: Person) {
     if (this.door) {
       this.tenants.push(person);
@@ -32,7 +33,7 @@ class MyHouse extends House {
 }
 const key = new Key();
 const person = new Person(key);
-const house = new MyHouse(key, [person]);
+const house = new MyHouse(key);
 house.openDoor(person.getKey());
 house.comeIn(person);
 export {};
